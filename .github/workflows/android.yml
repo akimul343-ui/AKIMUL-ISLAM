@@ -34,10 +34,28 @@ jobs:
       - name: Grant Execute Permission for Gradlew
         run: chmod +x gradlew
 
-      - name: Verify Environment Secrets Configuration
+      - name: Configure CI Environment Secrets & Fallback
         run: |
           if [ ! -f .env ] && [ -f .env.example ]; then
             cp .env.example .env
+          fi
+
+      - name: Ensure Debug Keystore is Available for APK Signing
+        run: |
+          if [ ! -f debug.keystore ]; then
+            if [ -f debug.keystore.base64 ]; then
+              base64 -d debug.keystore.base64 > debug.keystore
+            else
+              keytool -genkeypair -v \
+                -keystore debug.keystore \
+                -alias androiddebugkey \
+                -keypass android \
+                -storepass android \
+                -keyalg RSA \
+                -keysize 2048 \
+                -validity 10000 \
+                -dname "CN=Android Debug,O=Android,C=US"
+            fi
           fi
 
       - name: Install Virtual Framebuffer (Xvfb) for Headless KSP Environment
