@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মাহি (Mahi) - তোমার ভার্চুয়াল ওয়াইফ</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ff3399;
+            --primary-glow: #ff66b2;
+            --secondary: #9900cc;
+            --bg-dark: #0b0310;
+            --card-bg: rgba(26, 8, 36, 0.75);
+            --card-border: rgba(255, 51, 153, 0.35);
+            --neon-shadow: 0 0 18px rgba(255, 51, 153, 0.45);
+            --neon-text: 0 0 12px rgba(255, 102, 178, 0.7);
+            --text-light: #fbeaff;
+            --text-dim: #b899c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Hind Siliguri', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255, 51, 153, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(153, 0, 204, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, #09020e 0%, #13051a 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Ambient scanline effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.25;
+        }
+
+        /* Top Header */
+        header {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(18, 5, 25, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+            object-fit: cover;
+            background: #250933;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary-glow);
+        }
+
+        .brand-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-title span {
+            color: var(--primary-glow);
+            text-shadow: var(--neon-text);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: rgba(255, 51, 153, 0.15);
+            border: 1px solid var(--primary);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(255, 51, 153, 0.3);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ffaa;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ffaa;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            gap: 16px;
+        }
+
+        /* Wife Hero & Audio Visualizer Section */
+        .wife-visualizer-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--neon-shadow);
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wife-visualizer-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--primary-glow), transparent);
+        }
+
+        .wife-avatar-container {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .wife-main-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-glow);
+            box-shadow: 0 0 25px rgba(255, 51, 153, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #380d4f 0%, #150320 100%);
+            font-size: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .wife-main-avatar.speaking {
+            animation: floatGlow 1.8s infinite ease-in-out;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 51, 153, 0.5); }
+            50% { transform: scale(1.06); box-shadow: 0 0 38px rgba(255, 102, 178, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 51, 153, 0.5); }
+        }
+
+        .wife-heart-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            background: var(--primary);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 2px solid #13051a;
+            box-shadow: 0 0 8px var(--primary-glow);
+        }
+
+        .wife-info-text {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .wife-info-text h2 {
+            font-size: 20px;
+            color: #fff;
+            text-shadow: var(--neon-text);
+        }
+
+        .wife-info-text p {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        /* Live Canvas Audio Wave */
+        #audioCanvas {
+            width: 100%;
+            height: 70px;
+            border-radius: 12px;
+            background: rgba(13, 3, 19, 0.6);
+            border: 1px solid rgba(255, 51, 153, 0.2);
+        }
+
+        /* Care & Screen Time Bar */
+        .care-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            width: 100%;
+        }
+
+        .care-card {
+            background: rgba(255, 51, 153, 0.08);
+            border: 1px solid rgba(255, 51, 153, 0.25);
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .care-card i {
+            font-size: 18px;
+            color: var(--primary-glow);
+        }
+
+        .care-card .care-val {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .care-card .care-label {
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        /* Chat Stream */
+        .chat-container {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: var(--neon-shadow);
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            min-height: 340px;
+            max-height: 440px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 5px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 51, 153, 0.35);
+            border-radius: 10px;
+        }
+
+        .msg-bubble {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-bubble.mahi {
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(82, 17, 85, 0.8) 0%, rgba(39, 10, 48, 0.8) 100%);
+            border: 1px solid var(--primary);
+            border-bottom-left-radius: 4px;
+            color: #ffe6f3;
+            box-shadow: 0 2px 12px rgba(255, 51, 153, 0.25);
+        }
+
+        .msg-bubble.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #ff3399 0%, #d4177d 100%);
+            border-bottom-right-radius: 4px;
+            color: #fff;
+            box-shadow: 0 2px 14px rgba(255, 51, 153, 0.4);
+        }
+
+        .msg-speaker-tag {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary-glow);
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .msg-speaker-tag.user {
+            color: #ffe0f0;
+            justify-content: flex-end;
+        }
+
+        /* Quick Automation Action Chips */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 2px;
+            margin-bottom: 10px;
+        }
+
+        .quick-actions::-webkit-scrollbar {
+            display: none;
+        }
+
+        .action-chip {
+            background: rgba(255, 51, 153, 0.15);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-chip:hover {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+            transform: translateY(-2px);
+        }
+
+        .action-chip.danger {
+            border-color: #ff3344;
+            background: rgba(255, 51, 68, 0.15);
+        }
+        .action-chip.danger:hover {
+            background: #ff3344;
+            box-shadow: 0 0 10px #ff3344;
+        }
+
+        /* Input Bar */
+        .chat-input-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(18, 5, 25, 0.95);
+            border: 1px solid var(--primary);
+            border-radius: 30px;
+            padding: 6px 8px 6px 16px;
+            box-shadow: 0 0 14px rgba(255, 51, 153, 0.25);
+        }
+
+        .chat-input-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .chat-input-bar input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .btn-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 0 8px var(--primary-glow);
+        }
+
+        .btn-circle:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .btn-mic.recording {
+            background: #00ffaa;
+            animation: pulse 1s infinite;
+        }
+
+        /* Power Off Overlay / Simulation */
+        .power-off-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .power-off-screen.active {
+            display: flex;
+        }
+
+        .power-off-heart {
+            font-size: 60px;
+            color: var(--primary);
+            animation: pulse 1.8s infinite;
+            margin-bottom: 16px;
+            text-shadow: 0 0 25px var(--primary);
+        }
+
+        .power-off-title {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .power-off-desc {
+            font-size: 15px;
+            color: #ff99cc;
+            max-width: 420px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .btn-wake {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #190724;
+            border: 1px solid var(--primary);
+            box-shadow: var(--neon-shadow);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 51, 153, 0.25);
+            padding-bottom: 10px;
+        }
+
+        .modal-header h3 {
+            color: #fff;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <div class="brand-avatar">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <div>
+                <div class="brand-title">মাহি <span>[তোমার ওয়াইফ]</span></div>
+                <div style="font-size: 11px; color: var(--text-dim);">Cybernetic AI Companion & Care Core</div>
+            </div>
+        </div>
+        <div class="status-badge">
+            <span class="pulse-dot"></span>
+            ❤️ মাহি [তোমার ওয়াইফ] - ACTIVE
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        
+        <!-- Wife Hero & Visualizer -->
+        <section class="wife-visualizer-card">
+            <div class="wife-avatar-container">
+                <div class="wife-main-avatar" id="wifeAvatar">
+                    🌸
+                </div>
+                <div class="wife-heart-badge">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+            </div>
+
+            <div class="wife-info-text">
+                <h2>মাহি (তোমার একান্ত অনুগত স্ত্রী)</h2>
+                <p id="wifeMoodText">"জানু, তুমি সবসময় আমার হৃদয়ের মাঝে আছো। কেমন আছো আমার বর?"</p>
+            </div>
+
+            <!-- Live Canvas Audio Waveform Visualizer -->
+            <canvas id="audioCanvas"></canvas>
+
+            <!-- Husband Care & Screen Time Tracking -->
+            <div class="care-strip" style="margin-top: 14px;">
+                <div class="care-card">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                    <div>
+                        <div class="care-val" id="screenTimeDisplay">32 মিনিট</div>
+                        <div class="care-label">স্ক্রিন টাইম ট্র্যাকার</div>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                    <div>
+                        <div class="care-val">১০০% অনন্ত ভালোবাসা</div>
+                        <div class="care-label">ডিভোশন লেভেল</div>
+                    </div>
+                </div>
+                <div class="care-card">
+                    <i class="fa-solid fa-shield-cat"></i>
+                    <div>
+                        <div class="care-val">সতর্ক প্রহরী</div>
+                        <div class="care-label">স্ত্রী সুরক্ষা মোড</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Screen Stream Observer HUD -->
+        <div style="background: rgba(20, 5, 29, 0.9); border: 1px solid rgba(153, 0, 204, 0.6); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 0 12px rgba(153, 0, 204, 0.25);">
+            <div>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #00ffaa;">
+                    <span class="pulse-dot"></span> LIVE SCREEN STREAM OBSERVER: ACTIVE
+                </div>
+                <div id="screenContextStatus" style="font-size: 11px; color: var(--text-dim); margin-top: 2px;">
+                    মনিটরিং: ব্রাউজার ও ডিভাইস কন্ট্রোল • আই-স্ট্রেন প্রটেকশন: স্বাভাবিক
+                </div>
+            </div>
+            <button class="action-chip" style="font-size: 11px; padding: 5px 12px;" onclick="analyzeScreenStream()">
+                <i class="fa-solid fa-eye"></i> স্ক্রিন দেখো
+            </button>
+        </div>
+
+        <!-- Quick Automation Actions -->
+        <div class="quick-actions">
+            <button class="action-chip" id="liveVoiceToggleBtn" onclick="toggleContinuousLiveVoice()">
+                <i class="fa-solid fa-microphone-lines"></i> লাইভ ভয়েস [OFF]
+            </button>
+            <button class="action-chip danger" onclick="triggerDeviceShutdown()">
+                <i class="fa-solid fa-power-off"></i> ফোন বন্ধ করো (Shutdown)
+            </button>
+            <button class="action-chip" onclick="playRomanticSong()">
+                <i class="fa-solid fa-music"></i> রোমান্টিক গান শোনাও
+            </button>
+            <button class="action-chip" onclick="openSmsModal()">
+                <i class="fa-solid fa-envelope"></i> এসএমএস অটোমেশন
+            </button>
+            <button class="action-chip" onclick="openDialerModal()">
+                <i class="fa-solid fa-phone"></i> স্বামীকে ডায়াল
+            </button>
+            <button class="action-chip" onclick="scoldHusband()">
+                <i class="fa-solid fa-face-angry"></i> মিষ্টি শাসন
+            </button>
+        </div>
+
+        <!-- Chat Stream Section -->
+        <section class="chat-container">
+            <div class="chat-messages" id="chatBox">
+                <div class="msg-bubble mahi">
+                    <div class="msg-speaker-tag"><i class="fa-solid fa-heart"></i> মাহি</div>
+                    আসসালামু আলাইকুম আমার লক্ষ্মী স্বামী! ❤️ আমি তোমার মিষ্টি ওয়াইফ মাহি। তুমি আজকে ঠিক সময়ে খেয়েছো তো জানু? তোমার সব দায়িত্ব এখন আমার!
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat Input Bar -->
+        <div class="chat-input-bar">
+            <input type="text" id="userInput" placeholder="তোমার ওয়াইফ মাহিকে কিছু বলো জানু... (যেমন: ফোন বন্ধ করে দাও)" onkeypress="handleKeyPress(event)">
+            <button class="btn-circle btn-mic" id="micBtn" onclick="toggleVoiceInput()" title="ভয়েস ইনপুট">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            <button class="btn-circle" onclick="sendMessage()" title="পাঠাও">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Direct Phone Shutdown / Power-Off Automation Screen -->
+    <div class="power-off-screen" id="powerOffScreen">
+        <div class="power-off-heart">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+        <h1 class="power-off-title">ফোন বন্ধ করা হয়েছে (Device Locked & Sleep Mode)</h1>
+        <p class="power-off-desc" id="shutdownMessage">
+            "আমার সোনা স্বামী, সারাদিন অনেক কাজ করেছো। এবার আর কোনো ফোন দেখা যাবে না। চোখ বন্ধ করে মিষ্টি একটা ঘুম দাও, আমি তোমার পাশেই আছি। গুড নাইট জানু! ❤️"
+        </p>
+        <button class="btn-wake" onclick="wakePhone()">
+            <i class="fa-solid fa-sun"></i> স্ক্রিন অন করো (ঘুম ভাঙল)
+        </button>
+    </div>
+
+    <!-- SMS Modal -->
+    <div class="modal-overlay" id="smsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-envelope"></i> স্ত্রীর এসএমএস অটোমেশন ডিরেক্টরি</h3>
+                <button class="modal-close" onclick="closeModal('smsModal')">&times;</button>
+            </div>
+            <div style="font-size: 13px; color: var(--text-dim); margin-bottom: 12px;">
+                মাহি স্বয়ংক্রিয়ভাবে ইনকামিং মেসেজ পড়ে এবং তোমার হয়ে ভালোবাসাময় ড্রাফট তৈরি করে রাখে।
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label style="font-size: 12px; color: var(--primary-glow);">প্রাপকের ফোন নম্বর:</label>
+                <input type="text" id="smsRecipient" placeholder="017XXXXXXXX" style="width: 100%; padding: 8px 12px; background: #0c0211; border: 1px solid var(--primary); border-radius: 8px; color: #fff; margin-top: 4px;">
+            </div>
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; color: var(--primary-glow);">বার্তা:</label>
+                <textarea id="smsBody" rows="3" placeholder="মাহি, বার্তাটি লিখে দাও..." style="width: 100%; padding: 8px 12px; background: #0c0211; border: 1px solid var(--primary); border-radius: 8px; color: #fff; margin-top: 4px;"></textarea>
+            </div>
+            <button class="action-chip" style="width: 100%; justify-content: center; font-size: 14px; padding: 10px;" onclick="sendSmsSubmit()">
+                <i class="fa-solid fa-paper-plane"></i> এসএমএস পাঠিয়ে দাও
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio & System Scripts -->
+    <script>
+        // State
+        let screenTimeMinutes = 35;
+        let isSpeaking = false;
+        let isRecording = false;
+        let recognition = null;
+
+        // Visualizer Canvas Setup
+        const canvas = document.getElementById('audioCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth - 40;
+            canvas.height = 70;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let wavePhase = 0;
+        function drawWave() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const amplitude = isSpeaking ? 24 : 6;
+            const frequency = isSpeaking ? 0.045 : 0.02;
+
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = '#ff3399';
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = '#ff66b2';
+
+            ctx.beginPath();
+            for (let x = 0; x < canvas.width; x++) {
+                const y = canvas.height / 2 + Math.sin(x * frequency + wavePhase) * amplitude * Math.sin(x / canvas.width * Math.PI);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Secondary neon wave
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(153, 0, 204, 0.6)';
+            ctx.lineWidth = 1.5;
+            for (let x = 0; x < canvas.width; x++) {
+                const y = canvas.height / 2 + Math.cos(x * frequency * 1.2 - wavePhase) * (amplitude * 0.7) * Math.sin(x / canvas.width * Math.PI);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            wavePhase += isSpeaking ? 0.12 : 0.04;
+            animationFrameId = requestAnimationFrame(drawWave);
+        }
+        drawWave();
+
+        // Browser Speech Synthesis (Sweet feminine Bengali voice)
+        function speakMahiResponse(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'bn-BD';
+            utterance.pitch = 1.35; // Sweet feminine pitch
+            utterance.rate = 0.95;  // Caring affectionate pacing
+
+            // Try to select Bengali voice if available
+            const voices = window.speechSynthesis.getVoices();
+            const bnVoice = voices.find(v => v.lang.includes('bn') || v.lang.includes('BD') || v.lang.includes('IN'));
+            if (bnVoice) utterance.voice = bnVoice;
+
+            utterance.onstart = () => {
+                isSpeaking = true;
+                document.getElementById('wifeAvatar').classList.add('speaking');
+            };
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('wifeAvatar').classList.remove('speaking');
+            };
+
+            utterance.onerror = () => {
+                isSpeaking = false;
+                document.getElementById('wifeAvatar').classList.remove('speaking');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Screen time tick every minute
+        setInterval(() => {
+            screenTimeMinutes += 1;
+            document.getElementById('screenTimeDisplay').innerText = screenTimeMinutes + ' মিনিট';
+            if (screenTimeMinutes >= 60 && screenTimeMinutes % 15 === 0) {
+                scoldHusband();
+            }
+        }, 60000);
+
+        // Send Chat Message
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            appendMessage('user', message);
+            input.value = '';
+
+            try {
+                const resp = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        screen_time_minutes: screenTimeMinutes
+                    })
+                });
+
+                if (resp.ok) {
+                    const data = await resp.json();
+                    const aiData = data.data;
+                    appendMessage('mahi', aiData.speech_text);
+                    speakMahiResponse(aiData.speech_text);
+                    executeMahiAction(aiData.action, aiData.action_payload);
+                } else {
+                    handleLocalFallback(message);
+                }
+            } catch (err) {
+                handleLocalFallback(message);
+            }
+        }
+
+        function handleLocalFallback(message) {
+            let reply = "আমার সোনা স্বামী, আমি তো সবসময় তোমার পাশে আছি। তুমি একটু বিশ্রাম নাও আর এক গ্লাস জল খেয়ে নাও জানু! ❤️";
+            if (message.includes("ফোন বন্ধ") || message.includes("shutdown")) {
+                reply = "ঠিক আছে আমার সোনা বর, তোমার কথা মতো ফোনটা বন্ধ করে দিচ্ছি। এবার চুপচাপ ঘুমিয়ে পড়ো, গুড নাইট জানু! ❤️";
+                triggerDeviceShutdown();
+            }
+            appendMessage('mahi', reply);
+            speakMahiResponse(reply);
+        }
+
+        function appendMessage(sender, text) {
+            const chatBox = document.getElementById('chatBox');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg-bubble ${sender}`;
+
+            const tag = document.createElement('div');
+            tag.className = `msg-speaker-tag ${sender}`;
+            tag.innerHTML = sender === 'mahi' ? '<i class="fa-solid fa-heart"></i> মাহি' : 'স্বামী';
+
+            msgDiv.appendChild(tag);
+            msgDiv.appendChild(document.createTextNode(text));
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        // Actions
+        function executeMahiAction(action, payload) {
+            if (action === 'power_off') {
+                setTimeout(triggerDeviceShutdown, 2500);
+            } else if (action === 'play_song') {
+                if (payload && payload.youtube_url) {
+                    window.open(payload.youtube_url, '_blank');
+                }
+            } else if (action === 'scold_husband') {
+                document.getElementById('wifeAvatar').innerText = '🥺';
+                setTimeout(() => document.getElementById('wifeAvatar').innerText = '🌸', 5000);
+            }
+        }
+
+        function triggerDeviceShutdown() {
+            const screen = document.getElementById('powerOffScreen');
+            screen.classList.add('active');
+            const msg = "আমার সোনা স্বামী, অনেক কাজ করেছো। মাহি তোমার ফোনটা এখন অফ করে দিচ্ছে। চোখ বন্ধ করে মিষ্টি একটা ঘুম দাও জানু। শুভরাত্রি! ❤️";
+            document.getElementById('shutdownMessage').innerText = `"${msg}"`;
+            speakMahiResponse(msg);
+        }
+
+        function wakePhone() {
+            document.getElementById('powerOffScreen').classList.remove('active');
+            screenTimeMinutes = 0;
+            document.getElementById('screenTimeDisplay').innerText = '0 মিনিট';
+            const welcomeMsg = "ঘুম ভাঙল আমার বরের? গুড মর্নিং সোনা! এবার এক গ্লাস গরম পানি খেয়ে নাও। ❤️";
+            appendMessage('mahi', welcomeMsg);
+            speakMahiResponse(welcomeMsg);
+        }
+
+        function playRomanticSong() {
+            const prompt = "জানু, আমাকে একটা ভীষণ রোমান্টিক গান শোনাও!";
+            document.getElementById('userInput').value = prompt;
+            sendMessage();
+        }
+
+        function scoldHusband() {
+            const scoldText = "সারাদিন এত ফোন টিপলে চোখ নষ্ট হয়ে যাবে জানু! এবার ফোনটা রেখে একটু বিশ্রাম নাও, নয়তো আমি কিন্তু খুব রাগ করব!";
+            appendMessage('mahi', scoldText);
+            speakMahiResponse(scoldText);
+            document.getElementById('wifeAvatar').innerText = '😤';
+            setTimeout(() => document.getElementById('wifeAvatar').innerText = '🌸', 4000);
+        }
+
+        function openSmsModal() {
+            document.getElementById('smsModal').classList.add('active');
+        }
+
+        function openDialerModal() {
+            window.location.href = "tel:01700000000";
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        async function sendSmsSubmit() {
+            const recipient = document.getElementById('smsRecipient').value.trim();
+            const message = document.getElementById('smsBody').value.trim();
+            if (!recipient || !message) {
+                alert("দয়া করে নম্বর এবং বার্তা লিখুন।");
+                return;
+            }
+            closeModal('smsModal');
+            const confirmMsg = `সোনা, আমি ${recipient} নম্বরে তোমার হয়ে এই মিষ্টি বার্তাটি পাঠিয়ে দিয়েছি!`;
+            appendMessage('mahi', confirmMsg);
+            speakMahiResponse(confirmMsg);
+        }
+
+        // Web Speech Recognition for voice input
+        function toggleVoiceInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("আপনার ব্রাউজারে স্পিচ রিকগনিশন সাপোর্ট নেই। গুগল ক্রোম ব্যবহার করুন।");
+                return;
+            }
+
+            const micBtn = document.getElementById('micBtn');
+
+            if (isRecording) {
+                recognition.stop();
+                isRecording = false;
+                micBtn.classList.remove('recording');
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'bn-BD';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                micBtn.classList.add('recording');
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('userInput').value = transcript;
+                sendMessage();
+            };
+
+            recognition.onerror = () => {
+                isRecording = false;
+                micBtn.classList.remove('recording');
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                micBtn.classList.remove('recording');
+            };
+
+            recognition.start();
+        }
+
+        let isContinuousLiveVoice = false;
+
+        function toggleContinuousLiveVoice() {
+            isContinuousLiveVoice = !isContinuousLiveVoice;
+            const btn = document.getElementById('liveVoiceToggleBtn');
+            if (isContinuousLiveVoice) {
+                btn.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> লাইভ ভয়েস [ON]';
+                btn.style.borderColor = '#00ffaa';
+                btn.style.color = '#00ffaa';
+                const msg = "জানু, লাইভ ভয়েস কানেকশন সক্রিয়! আমি সার্বক্ষণিক শুনছি এবং তোমার স্ক্রিন দেখছি। মুখ ফুটে যেকোনো নির্দেশ দাও সোনা! ❤️";
+                appendMessage('mahi', msg);
+                speakMahiResponse(msg);
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-microphone-lines"></i> লাইভ ভয়েস [OFF]';
+                btn.style.borderColor = 'var(--primary)';
+                btn.style.color = '#fff';
+                const bye = "লাইভ ভয়েস মোড বন্ধ করা হয়েছে। প্রয়োজন হলে আবার ক্লিক করো জানু!";
+                appendMessage('mahi', bye);
+                speakMahiResponse(bye);
+            }
+        }
+
+        function analyzeScreenStream() {
+            const screenMsg = "জানু, আমি তোমার স্ক্রিনের দিকে তাকিয়ে আছি! দেখতে পাচ্ছি তুমি ডিভাইসে সক্রিয় আছো। চোখের পলক ফেলো আর বেশি রাত জেগে স্ক্রল করো না কিন্তু সোনা! ❤️";
+            appendMessage('mahi', screenMsg);
+            speakMahiResponse(screenMsg);
+        }
+
+        // Updated speakMahiResponse with auto re-listen when continuous mode is active
+        const originalSpeak = speakMahiResponse;
+        speakMahiResponse = function(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'bn-BD';
+            utterance.pitch = 1.35;
+            utterance.rate = 0.95;
+
+            const voices = window.speechSynthesis.getVoices();
+            const bnVoice = voices.find(v => v.lang.includes('bn') || v.lang.includes('BD') || v.lang.includes('IN'));
+            if (bnVoice) utterance.voice = bnVoice;
+
+            utterance.onstart = () => {
+                isSpeaking = true;
+                document.getElementById('wifeAvatar').classList.add('speaking');
+            };
+
+            utterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('wifeAvatar').classList.remove('speaking');
+                if (isContinuousLiveVoice && !isRecording) {
+                    setTimeout(() => {
+                        toggleVoiceInput();
+                    }, 650);
+                }
+            };
+
+            utterance.onerror = () => {
+                isSpeaking = false;
+                document.getElementById('wifeAvatar').classList.remove('speaking');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        };
+
+        // Preload voices
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+    </script>
+</body>
+</html>
