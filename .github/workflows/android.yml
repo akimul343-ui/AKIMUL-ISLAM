@@ -40,11 +40,16 @@ jobs:
             cp .env.example .env
           fi
 
+      - name: Install Virtual Framebuffer (Xvfb) for Headless KSP Environment
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb
+
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
 
       - name: Assemble Debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+        run: xvfb-run -a ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
