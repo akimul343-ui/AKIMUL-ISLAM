@@ -1,6 +1,0 @@
-{
-  "name": "Mahi - AI Wife",
-  "description": "Advanced personal AI companion and virtual wife 'মাহি' featuring cybernetic romantic neon UI, voice synthesis, device care, and smart assistance.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
