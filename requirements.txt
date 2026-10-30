@@ -1,4 +1,0 @@
-requests==2.31.0
-google-generativeai==0.8.3
-protobuf==5.29.3
-uvicorn==0.34.0
