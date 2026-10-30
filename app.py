@@ -8,9 +8,10 @@ import google.generativeai as genai
 
 app = FastAPI(title="Rakib AI Companion & System Automation Core")
 
-# Secure API Key Pool with Automatic Background Rotation
-API_KEYS = [
-
+# Retrieve API keys securely from Environment Variables or Fallback List
+# Add your keys in Render / Hosting Environment Variables as GEMINI_API_KEYS (comma-separated)
+RAW_KEYS = os.getenv("GEMINI_API_KEYS", "YOUR_GEMINI_API_KEY_1,YOUR_GEMINI_API_KEY_2")
+API_KEYS = [k.strip() for k in RAW_KEYS.split(",") if k.strip()]
 
 api_key_cycle = itertools.cycle(API_KEYS)
 
