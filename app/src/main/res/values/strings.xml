@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SentinelGuard</string>
+    <string name="device_admin_label">SentinelGuard Device Protection</string>
+    <string name="device_admin_description">Allows SentinelGuard to remotely lock your device screen when a lost-device SMS or cloud command is received.</string>
+    <string name="accessibility_service_label">SentinelGuard Power Menu Guard</string>
+    <string name="accessibility_service_description">Protects your device by blocking unauthorized access to the power-off or restart menu while anti-theft guard is armed.</string>
+    <string name="notification_channel_guard_name">Anti-Theft Active Guard</string>
+    <string name="notification_channel_guard_desc">Persistent foreground status for SentinelGuard remote sync and location tracking.</string>
+    <string name="notification_channel_alert_name">Security Alerts</string>
+    <string name="notification_channel_alert_desc">Critical notifications when SMS or remote anti-theft commands are triggered.</string>
+</resources>

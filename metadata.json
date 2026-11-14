@@ -1,0 +1,6 @@
+{
+  "name": "SentinelGuard",
+  "description": "Universal Android Anti-Theft Protection with Offline SMS Commands, Device Admin Lock, Power Menu Guard, and FastAPI Remote Sync",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
