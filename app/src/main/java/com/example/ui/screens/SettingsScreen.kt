@@ -55,6 +55,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.data.AppRole
+import com.example.data.Constants
 import com.example.data.GuardSettings
 import com.example.data.ProtectionStatus
 import kotlin.math.roundToInt
@@ -95,7 +96,7 @@ fun SettingsScreen(
     var secretLockKeyword by remember(settings.secretLockKeyword) {
         mutableStateOf(settings.secretLockKeyword)
     }
-    var serverUrl by remember(settings.serverUrl) { mutableStateOf(settings.serverUrl) }
+    val serverUrl = Constants.RENDER_BASE_URL
     var deviceId by remember(settings.deviceId) { mutableStateOf(settings.deviceId) }
     var trustedPhone by remember(settings.trustedPhone) { mutableStateOf(settings.trustedPhone) }
     var ownerContactInfo by remember(settings.ownerContactInfo) {
@@ -275,15 +276,29 @@ fun SettingsScreen(
                     ) {
                         Text("Render Flask Server & Lockdown Rules", style = MaterialTheme.typography.titleMedium)
 
-                        OutlinedTextField(
-                            value = serverUrl,
-                            onValueChange = { serverUrl = it },
-                            label = { Text("Render Flask Server URL") },
-                            singleLine = true,
+                        Surface(
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            shape = RoundedCornerShape(12.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .testTag("settings_server_url_input")
-                        )
+                                .testTag("settings_server_url_badge")
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(12.dp),
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                Text(
+                                    text = "HARDCODED RENDER FLASK SERVER",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = serverUrl,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+                        }
 
                         OutlinedTextField(
                             value = ownerContactInfo,

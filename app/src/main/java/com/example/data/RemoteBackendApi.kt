@@ -45,15 +45,19 @@ interface RemoteBackendApi {
     ): DeviceStatusResponse
 }
 
-class RemoteRepository {
+/**
+ * Singleton Retrofit client bound directly to the hardcoded Render Flask server URL
+ * in [Constants.RENDER_BASE_URL].
+ */
+object ApiClient {
     private val moshi: Moshi = Moshi.Builder()
         .addLast(KotlinJsonAdapterFactory())
         .build()
 
-    private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(25, TimeUnit.SECONDS)
-        .writeTimeout(20, TimeUnit.SECONDS)
+    val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(25, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(25, TimeUnit.SECONDS)
         .addInterceptor(
             HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BASIC
@@ -61,51 +65,57 @@ class RemoteRepository {
         )
         .build()
 
-    private var cachedBaseUrl: String? = null
-    private var cachedApi: RemoteBackendApi? = null
+    val baseUrl: String = normalizeUrl(Constants.RENDER_BASE_URL)
 
-    private fun apiFor(baseUrl: String): RemoteBackendApi {
-        val normalized = normalizeUrl(baseUrl)
-        if (cachedBaseUrl == normalized && cachedApi != null) {
-            return cachedApi!!
-        }
-        val retrofit = Retrofit.Builder()
-            .baseUrl("$normalized/")
+    val api: RemoteBackendApi by lazy {
+        Retrofit.Builder()
+            .baseUrl("$baseUrl/")
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-        val api = retrofit.create(RemoteBackendApi::class.java)
-        cachedBaseUrl = normalized
-        cachedApi = api
-        return api
+            .create(RemoteBackendApi::class.java)
     }
 
-    private fun normalizeUrl(raw: String): String {
+    fun normalizeUrl(raw: String): String {
         val trimmed = raw.trim().trimEnd('/')
+        if (trimmed.isEmpty()) return normalizeUrl(Constants.RENDER_BASE_URL)
         return if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
             trimmed
         } else {
             "https://$trimmed"
         }
     }
+}
 
-    suspend fun checkHealth(baseUrl: String): Result<HealthResponse> = runCatching {
+class RemoteRepository {
+    private fun apiFor(baseUrl: String = Constants.RENDER_BASE_URL): RemoteBackendApi {
+        val normalized = ApiClient.normalizeUrl(baseUrl)
+        if (normalized == ApiClient.baseUrl) {
+            return ApiClient.api
+        }
+        return ApiClient.api
+    }
+
+    suspend fun checkHealth(baseUrl: String = Constants.RENDER_BASE_URL): Result<HealthResponse> = runCatching {
         apiFor(baseUrl).getHealth()
     }
 
-    suspend fun getFleetDevices(baseUrl: String, fleetId: String): Result<FleetDevicesResponse> = runCatching {
+    suspend fun getFleetDevices(
+        baseUrl: String = Constants.RENDER_BASE_URL,
+        fleetId: String
+    ): Result<FleetDevicesResponse> = runCatching {
         apiFor(baseUrl).getFleetDevices(fleetId.trim().uppercase())
     }
 
     suspend fun sendCommand(
-        baseUrl: String,
+        baseUrl: String = Constants.RENDER_BASE_URL,
         request: SendCommandRequest
     ): Result<SendCommandResponse> = runCatching {
         apiFor(baseUrl).sendCommand(request)
     }
 
     suspend fun pollCommands(
-        baseUrl: String,
+        baseUrl: String = Constants.RENDER_BASE_URL,
         deviceId: String,
         pin: String,
         deviceName: String,
@@ -128,7 +138,7 @@ class RemoteRepository {
     }
 
     suspend fun reportLocation(
-        baseUrl: String,
+        baseUrl: String = Constants.RENDER_BASE_URL,
         request: LocationReportRequest
     ): Result<Unit> = runCatching {
         apiFor(baseUrl).reportLocation(request)
@@ -136,7 +146,7 @@ class RemoteRepository {
     }
 
     suspend fun getDeviceStatus(
-        baseUrl: String,
+        baseUrl: String = Constants.RENDER_BASE_URL,
         deviceId: String,
         pin: String
     ): Result<DeviceStatusResponse> = runCatching {

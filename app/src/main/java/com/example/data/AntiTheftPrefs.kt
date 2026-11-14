@@ -13,15 +13,15 @@ import java.util.UUID
 
 data class GuardSettings(
     val appRole: AppRole = AppRole.DUAL_MODE,
-    val fleetId: String = "FAMILY-FLEET",
+    val fleetId: String = Constants.DEFAULT_FLEET_ID,
     val deviceId: String = "",
     val deviceAlias: String = "",
     val secretPin: String = "2468",
     val smsPrefix: String = "SG",
     val secretLockKeyword: String = "#LOCK_PHONE#",
-    val serverUrl: String = "https://sentinelguard-flask-server.onrender.com",
+    val serverUrl: String = Constants.RENDER_BASE_URL,
     val trustedPhone: String = "",
-    val ownerContactInfo: String = "@Akimul0",
+    val ownerContactInfo: String = Constants.DEFAULT_OWNER_CONTACT,
     val guardArmed: Boolean = false,
     val isDeviceLocked: Boolean = false,
     val lockContactInfo: String = "@Akimul0",
@@ -67,15 +67,16 @@ class AntiTheftPrefs(context: Context) {
 
         return GuardSettings(
             appRole = role,
-            fleetId = prefs.getString(KEY_FLEET_ID, "FAMILY-FLEET") ?: "FAMILY-FLEET",
+            fleetId = prefs.getString(KEY_FLEET_ID, Constants.DEFAULT_FLEET_ID) ?: Constants.DEFAULT_FLEET_ID,
             deviceId = prefs.getString(KEY_DEVICE_ID, "SG-DEVICE") ?: "SG-DEVICE",
             deviceAlias = prefs.getString(KEY_DEVICE_ALIAS, deviceDisplayName()) ?: deviceDisplayName(),
             secretPin = prefs.getString(KEY_SECRET_PIN, "2468") ?: "2468",
             smsPrefix = prefs.getString(KEY_SMS_PREFIX, "SG") ?: "SG",
             secretLockKeyword = prefs.getString(KEY_LOCK_KEYWORD, "#LOCK_PHONE#") ?: "#LOCK_PHONE#",
-            serverUrl = prefs.getString(KEY_SERVER_URL, DEFAULT_SERVER_URL) ?: DEFAULT_SERVER_URL,
+            serverUrl = Constants.RENDER_BASE_URL,
             trustedPhone = prefs.getString(KEY_TRUSTED_PHONE, "") ?: "",
-            ownerContactInfo = prefs.getString(KEY_OWNER_CONTACT_INFO, "@Akimul0") ?: "@Akimul0",
+            ownerContactInfo = prefs.getString(KEY_OWNER_CONTACT_INFO, Constants.DEFAULT_OWNER_CONTACT)
+                ?: Constants.DEFAULT_OWNER_CONTACT,
             guardArmed = prefs.getBoolean(KEY_GUARD_ARMED, false),
             isDeviceLocked = prefs.getBoolean(KEY_IS_DEVICE_LOCKED, false),
             lockContactInfo = prefs.getString(KEY_LOCK_CONTACT_INFO, "@Akimul0") ?: "@Akimul0",
@@ -104,7 +105,7 @@ class AntiTheftPrefs(context: Context) {
             .putString(KEY_SECRET_PIN, updated.secretPin.trim())
             .putString(KEY_SMS_PREFIX, updated.smsPrefix.trim().uppercase().ifEmpty { "SG" })
             .putString(KEY_LOCK_KEYWORD, updated.secretLockKeyword.trim().ifEmpty { "#LOCK_PHONE#" })
-            .putString(KEY_SERVER_URL, updated.serverUrl.trim().trimEnd('/'))
+            .putString(KEY_SERVER_URL, Constants.RENDER_BASE_URL)
             .putString(KEY_TRUSTED_PHONE, updated.trustedPhone.trim())
             .putString(KEY_OWNER_CONTACT_INFO, updated.ownerContactInfo.trim())
             .putBoolean(KEY_GUARD_ARMED, updated.guardArmed)
@@ -221,7 +222,6 @@ class AntiTheftPrefs(context: Context) {
 
     companion object {
         private const val PREFS_NAME = "sentinel_guard_prefs"
-        private const val DEFAULT_SERVER_URL = "https://sentinelguard-flask-server.onrender.com"
 
         private const val KEY_APP_ROLE = "app_role"
         private const val KEY_FLEET_ID = "fleet_id"

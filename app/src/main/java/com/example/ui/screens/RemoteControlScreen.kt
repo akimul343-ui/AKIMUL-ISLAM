@@ -67,6 +67,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.data.Constants
 import com.example.data.DeviceStatusResponse
 import com.example.data.RemoteCommandType
 import com.example.data.SavedTargetDevice
@@ -95,7 +96,7 @@ fun RemoteControlScreen(
 ) {
     val context = LocalContext.current
     var modeIndex by remember { mutableIntStateOf(0) } // 0 = Online Flask, 1 = Offline SMS
-    var serverUrl by remember(uiState.settings.serverUrl) { mutableStateOf(uiState.settings.serverUrl) }
+    val serverUrl = Constants.RENDER_BASE_URL
     var fleetId by remember(uiState.settings.fleetId) { mutableStateOf(uiState.settings.fleetId) }
     var targetDeviceId by remember(uiState.settings.deviceId) { mutableStateOf(uiState.settings.deviceId) }
     var targetPhone by remember(uiState.settings.trustedPhone) { mutableStateOf(uiState.settings.trustedPhone) }
@@ -355,15 +356,29 @@ fun RemoteControlScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         if (modeIndex == 0) {
-                            OutlinedTextField(
-                                value = serverUrl,
-                                onValueChange = { serverUrl = it },
-                                label = { Text("Render Flask Server URL") },
-                                singleLine = true,
+                            Surface(
+                                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .testTag("remote_server_url_input")
-                            )
+                                    .testTag("remote_server_url_badge")
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    Text(
+                                        text = "RENDER BACKEND (AUTO-CONNECTED)",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        text = serverUrl,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
                             OutlinedTextField(
                                 value = contactInfo,
                                 onValueChange = { contactInfo = it },

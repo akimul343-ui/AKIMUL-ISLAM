@@ -4,9 +4,9 @@ services:
     runtime: python
     plan: free
     rootDir: server
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4
+    buildCommand: python3 -m pip install --upgrade pip && python3 -m pip install -r requirements.txt
+    startCommand: python3 -m gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: 3.12.8

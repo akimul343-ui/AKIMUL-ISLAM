@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.AntiTheftPrefs
 import com.example.data.AppRole
+import com.example.data.Constants
 import com.example.data.DeviceStatusResponse
 import com.example.data.GuardSettings
 import com.example.data.LogSeverity
@@ -431,15 +432,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         prefs.updateSettings {
             it.copy(
                 appRole = appRole,
-                fleetId = fleetId.ifBlank { "FAMILY-FLEET" },
+                fleetId = fleetId.ifBlank { Constants.DEFAULT_FLEET_ID },
                 deviceAlias = deviceAlias.ifBlank { prefs.deviceDisplayName() },
                 secretPin = secretPin.ifBlank { "2468" },
                 smsPrefix = smsPrefix.ifBlank { "SG" },
                 secretLockKeyword = secretLockKeyword.ifBlank { "#LOCK_PHONE#" },
-                serverUrl = serverUrl.ifBlank { "https://sentinelguard-flask-server.onrender.com" },
+                serverUrl = Constants.RENDER_BASE_URL,
                 deviceId = deviceId.ifBlank { it.deviceId },
                 trustedPhone = trustedPhone,
-                ownerContactInfo = ownerContactInfo.ifBlank { "@Akimul0" },
+                ownerContactInfo = ownerContactInfo.ifBlank { Constants.DEFAULT_OWNER_CONTACT },
                 lockMessage = lockMessage.ifBlank { it.lockMessage },
                 blockPowerMenu = blockPowerMenu,
                 blockSettingsAndShade = blockSettingsAndShade,
